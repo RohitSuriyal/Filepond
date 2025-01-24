@@ -13,12 +13,12 @@
 </head>
 
 <body>
-    <input type="file" name="pondfile" />
+    <input type="file" name="pondfile" id="pondfile" />
 
     <script src="https://unpkg.com/filepond@^4/dist/filepond.js"></script>
 
     <script>
-        const inputElement = document.querySelector('input[type="file"]');
+        const inputElement = document.getElementById("pondfile");
         const pond = FilePond.create(inputElement);
         FilePond.setOptions({
             server: {
@@ -35,6 +35,7 @@
 
 
                         console.log(data.path);
+                        
                     },
                     onerror: (error) => {
                         console.log('Upload error', error);
