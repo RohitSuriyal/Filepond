@@ -1,0 +1,29 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+
+class Pondfile extends Controller
+{
+    public function pondfile(Request $request)
+    {
+        if ($request->hasFile('pondfile') ){
+            // Get the file from the request
+            $file = $request->file('pondfile');
+            
+            // Generate a unique filename
+            $fileName = uniqid('pondfile_', true) . '.' . $file->getClientOriginalExtension();
+            
+            // Save the file to the temp directory in storage
+            $path = $file->storeAs('temp', $fileName, 'public'); // Store the file in the 'storage/app/public/temp' directory
+
+            // Return the file path to FilePond as a successful response
+            return response()->json(['path' => $path]);
+        }
+
+        // If no file was uploaded or it is invalid, return an error response
+        return response()->json(['error' => 'No file uploaded or file is invalid'], 400);
+    }
+}

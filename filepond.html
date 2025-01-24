@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://unpkg.com/filepond@^4/dist/filepond.css"
+        rel="stylesheet" />
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
+    <title>Document</title>
+
+</head>
+
+<body>
+    <input type="file" name="pondfile" />
+
+    <script src="https://unpkg.com/filepond@^4/dist/filepond.js"></script>
+
+    <script>
+        const inputElement = document.querySelector('input[type="file"]');
+        const pond = FilePond.create(inputElement);
+        FilePond.setOptions({
+            server: {
+                process: {
+                    url: "{{ route('upload_pondfile') }}",
+                    method: 'POST',
+                    withCredentials: false,
+                    dataType: "json",
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    },
+                    onload: (response) => {
+                        const data = JSON.parse(response);
+
+
+                        console.log(data.path);
+                    },
+                    onerror: (error) => {
+                        console.log('Upload error', error);
+                    },
+                },
+            },
+        });
+    </script>
+
+</body>
+
+</html>
